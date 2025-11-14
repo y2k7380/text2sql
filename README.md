@@ -20,8 +20,12 @@ Easily integrate with existing LLMs for enhanced, customized performance.
 
 # Dependencies
 
-Text2SQL agent uses chromadb to store vector embeddings and it relies on OpenAI Embeddings function
-Support for other LLMs and Vector DBs is coming soon.
+Text2SQL agent uses:
+- **ChromaDB** for storing vector embeddings
+- **OpenAI Embeddings** for semantic search
+- **LiteLLM** for flexible LLM integration - supports OpenAI, Anthropic, Ollama, and 100+ other providers
+
+You can use local models via Ollama or cloud-based LLMs from various providers.
 
 # Prerequsites
 
@@ -43,6 +47,71 @@ pip install .
 1. open `descriptors/default/t2sql_descriptor.json` with any text editor
 2. set litellm settings to [router_model_list](https://docs.litellm.ai/docs/routing#quick-start)
 
+#### Using Ollama (Local LLMs)
+
+To use Ollama with local models like Llama, Mistral, or Qwen:
+
+1. Install and start Ollama: https://ollama.ai
+2. Pull your desired model (e.g., `ollama pull llama3.1`)
+3. Update `t2sql_descriptor.json`:
+
+```json
+{
+  "router_model_list": [
+    {
+      "model_name": "ollama_llama",
+      "litellm_params": {
+        "model": "ollama/llama3.1",
+        "api_base": "http://localhost:11434"
+      }
+    }
+  ],
+  "model_sql": "ollama_llama",
+  "model_table_selection": "ollama_llama"
+}
+```
+
+**Popular Ollama models for SQL generation:**
+- `llama3.1:8b` - Fast and efficient
+- `qwen2.5-coder:7b` - Good for code/SQL tasks
+- `deepseek-coder:6.7b` - Optimized for coding
+
+#### Using Cloud LLMs
+
+**OpenAI:**
+```json
+{
+  "router_model_list": [
+    {
+      "model_name": "gpt4",
+      "litellm_params": {
+        "model": "gpt-4-turbo",
+        "api_key": "sk-..."
+      }
+    }
+  ],
+  "model_sql": "gpt4",
+  "model_table_selection": "gpt4"
+}
+```
+
+**Anthropic Claude:**
+```json
+{
+  "router_model_list": [
+    {
+      "model_name": "claude",
+      "litellm_params": {
+        "model": "claude-3-5-sonnet-20241022",
+        "api_key": "sk-ant-..."
+      }
+    }
+  ],
+  "model_sql": "claude",
+  "model_table_selection": "claude"
+}
+```
+
 
 # Run streamlit application
 
@@ -58,12 +127,55 @@ You can start asking question right after it's finished.
 
 open descriptors/default/t2sql_descriptor.json with any text editor
 set access to your database "db" object
-in case if you needd to use ssh tunnel, add ssh_tunnel to your descriptor:
+
+## Supported Databases
+
+- PostgreSQL
+- MySQL
+- MSSQL
+- Redshift
+- Snowflake
+
+## Database Configuration Examples
+
+### PostgreSQL
+```json
+"db": {
+  "source": "postgres",
+  "connection_config": {
+    "schema": "public",
+    "password": "postgres",
+    "host": "localhost",
+    "database": "dvdrental",
+    "user": "postgres",
+    "port": 5433
+  }
+}
+```
+
+### MySQL
+```json
+"db": {
+  "source": "mysql",
+  "connection_config": {
+    "schema": null,
+    "password": "mysql",
+    "host": "localhost",
+    "database": "testdb",
+    "user": "mysql",
+    "port": 3307
+  }
+}
+```
+
+## SSH Tunnel Support
+
+In case if you need to use ssh tunnel, add ssh_tunnel to your descriptor:
 
 ```json
 "ssh_tunnel": {
     "username": "",
-    "private_key_path": "",    
+    "private_key_path": "",
 }
 ```
 
