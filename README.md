@@ -58,12 +58,55 @@ You can start asking question right after it's finished.
 
 open descriptors/default/t2sql_descriptor.json with any text editor
 set access to your database "db" object
-in case if you needd to use ssh tunnel, add ssh_tunnel to your descriptor:
+
+## Supported Databases
+
+- PostgreSQL
+- MySQL
+- MSSQL
+- Redshift
+- Snowflake
+
+## Database Configuration Examples
+
+### PostgreSQL
+```json
+"db": {
+  "source": "postgres",
+  "connection_config": {
+    "schema": "public",
+    "password": "postgres",
+    "host": "localhost",
+    "database": "dvdrental",
+    "user": "postgres",
+    "port": 5433
+  }
+}
+```
+
+### MySQL
+```json
+"db": {
+  "source": "mysql",
+  "connection_config": {
+    "schema": null,
+    "password": "mysql",
+    "host": "localhost",
+    "database": "testdb",
+    "user": "mysql",
+    "port": 3307
+  }
+}
+```
+
+## SSH Tunnel Support
+
+In case if you need to use ssh tunnel, add ssh_tunnel to your descriptor:
 
 ```json
 "ssh_tunnel": {
     "username": "",
-    "private_key_path": "",    
+    "private_key_path": "",
 }
 ```
 

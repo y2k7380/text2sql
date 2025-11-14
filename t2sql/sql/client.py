@@ -160,7 +160,7 @@ class MysqlClient(BaseAsyncDatabaseClient):
 
     def _create_engine(self) -> DatabaseSessionManager:
         return DatabaseSessionManager(
-            f"myssql+asyncmy://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
+            f"mysql+asyncmy://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
         )
 
 
@@ -249,7 +249,7 @@ class DatabaseClientFactory:
 
         if source == "postgres":
             return PostgresClient(**connection_config)
-        elif source == "myssql":
+        elif source == "mysql":
             return MysqlClient(**connection_config)
         elif source == "mssql":
             return MssqlClient(**connection_config)
